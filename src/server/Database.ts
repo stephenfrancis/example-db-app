@@ -1,13 +1,18 @@
 import { Pool, PoolClient, QueryResult } from 'pg'
 
-const pool = new Pool()
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
 
-export const query = (text: string, params: any): Promise<QueryResult<any>> => {
+export const query = (text: string, params?: any): Promise<QueryResult<any>> => {
   const start = Date.now()
   return new Promise((resolve, reject) => {
     pool.query(text, params, (err, res) => {
       const duration = Date.now() - start
-      console.log('executed query', { text, duration, rows: res && res.rowCount, err })
+      console.log('executed query', { text, duration, rows: res && res.rowCount })
       if (err) {
         reject(err)
       } else {
@@ -38,3 +43,8 @@ export const getClient = (): Promise<[PoolClient, () => void]> => {
     })
   })
 }
+
+process.on('beforeExit', (code) => {
+  console.log('closing the connection pool');
+  pool.end()
+})

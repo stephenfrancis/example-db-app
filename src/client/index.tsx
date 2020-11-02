@@ -18,7 +18,7 @@ const App: React.FC<{}> = () => {
     <div>
       <h1>Example DB App</h1>
       <p>User Code: {user_code}</p>
-      <Data fetch={window.fetch} userCode={user_code} />
+      <Data fetch={window.fetch.bind(window)} userCode={user_code} />
     </div>
   )
 }

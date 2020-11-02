@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "experimental",
   "scripts": {
-    "build": "npx parcel build src/index.html",
+    "build": "npx parcel build src/client/index.html",
     "clean": "rm -f -r dist/ build/*",
-    "exec": "npx parcel build src/server/Main.ts --dist-dir build --no-minify && node build/Main.js",
+    "compile": "npx tsc",
+    "database": "docker run -e POSTGRES_PASSWORD=$PGPASSWORD -p 5432:5432 postgres",
     "local": "npx parcel serve src/index.html",
-    "test": "npx jest"
+    "setup": "node build/server/Init.js",
+    "test": "npx jest",
+    "web": "heroku local web"
   },
   "author": "",
   "repository": {
